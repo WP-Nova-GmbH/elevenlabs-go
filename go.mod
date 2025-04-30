@@ -1,3 +1,3 @@
-module github.com/haguro/elevenlabs-go
+module github.com/Mliviu79/elevenlabs-go
 
 go 1.18

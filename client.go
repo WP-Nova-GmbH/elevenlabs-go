@@ -164,11 +164,19 @@ func LatencyOptimizations(value int) QueryFunc {
 // mp3_44100_96 - mp3 with 44.1kHz sample rate at 96kbps.
 // mp3_44100_128 - mp3 with 44.1kHz sample rate at 128kbps (default)
 // mp3_44100_192 - mp3 with 44.1kHz sample rate at 192kbps (Requires subscription of Creator tier or above).
+// pcm_8000 - PCM (S16LE) with 8kHz sample rate.
 // pcm_16000 - PCM (S16LE) with 16kHz sample rate.
 // pcm_22050 - PCM (S16LE) with 22.05kHz sample rate.
 // pcm_24000 - PCM (S16LE) with 24kHz sample rate.
 // pcm_44100 - PCM (S16LE) with 44.1kHz sample rate (Requires subscription of Independent Publisher tier or above).
+// pcm_48000 - PCM (S16LE) with 48kHz sample rate.
+// alaw_8000 - A-law with 8kHz sample rate.
 // ulaw_8000 - μ-law with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.
+// opus_48000_32 - Opus with 48kHz sample rate at 32kbps.
+// opus_48000_64 - Opus with 48kHz sample rate at 64kbps.
+// opus_48000_96 - Opus with 48kHz sample rate at 96kbps.
+// opus_48000_128 - Opus with 48kHz sample rate at 128kbps (default).
+// opus_48000_192 - Opus with 48kHz sample rate at 192kbps (Requires subscription of Independent Publisher tier or above).
 func OutputFormat(value string) QueryFunc {
 	return func(q *url.Values) {
 		q.Add("output_format", value)

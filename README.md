@@ -1,7 +1,7 @@
 # elevenlabs-go
 
 ![Go version](https://img.shields.io/badge/go-1.18-blue)
-![License](https://img.shields.io/github/license/haguro/elevenlabs-go)
+![License](https://img.shields.io/github/license/Mliviu79/elevenlabs-go)
 ![Tests](https://github.com/haguro/elevenlabs-go/actions/workflows/tests.yml/badge.svg?branch=main&event=push)
 [![codecov](https://codecov.io/gh/haguro/elevenlabs-go/branch/main/graph/badge.svg?token=UM33DSSTAG)](https://codecov.io/gh/haguro/elevenlabs-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/haguro/elevenlabs-go)](https://goreportcard.com/report/github.com/haguro/elevenlabs-go)
@@ -9,10 +9,17 @@
 
 This is a Go client library for the [ElevenLabs](https://elevenlabs.io/) voice cloning and speech synthesis platform. It provides a basic interface for Go programs to interact with the ElevenLabs [API](https://docs.elevenlabs.io/api-reference).
 
+## About this Fork
+
+This repository is a fork of [haguro/elevenlabs-go](https://github.com/haguro/elevenlabs-go) with the following changes:
+
+1. Updated package name to `github.com/Mliviu79/elevenlabs-go`
+2. Updated the `TextToSpeechRequest` struct to match the latest ElevenLabs API
+
 ## Installation
 
 ```bash
-go get github.com/haguro/elevenlabs-go
+go get github.com/Mliviu79/elevenlabs-go
 ```
 
 ## Example Usage
@@ -34,7 +41,7 @@ import (
  "os"
  "time"
 
- "github.com/haguro/elevenlabs-go"
+ "github.com/Mliviu79/elevenlabs-go"
 )
 
 func main() {
@@ -74,7 +81,7 @@ import (
  "os"
  "time"
 
- el "github.com/haguro/elevenlabs-go"
+ el "github.com/Mliviu79/elevenlabs-go"
 )
 
 func main() {
@@ -115,7 +122,7 @@ import (
  "os/exec"
  "time"
 
- "github.com/haguro/elevenlabs-go"
+ "github.com/Mliviu79/elevenlabs-go"
 )
 
 func main() {
@@ -171,11 +178,30 @@ immediately, even if the buffer isn't full.`
 }
 ```
 
+## TextToSpeechRequest Struct
+
+The `TextToSpeechRequest` struct has been updated to match the latest ElevenLabs API:
+
+```go
+type TextToSpeechRequest struct {
+	Text                            string                           `json:"text"`
+	ModelID                         string                           `json:"model_id,omitempty"`
+	LanguageCode                    string                           `json:"language_code,omitempty"`
+	PronunciationDictionaryLocators []PronunciationDictionaryLocator `json:"pronunciation_dictionary_locators,omitempty"`
+	Seed                            int                              `json:"seed,omitempty"`
+	PreviousText                    string                           `json:"previous_text,omitempty"`
+	NextText                        string                           `json:"next_text,omitempty"`
+	PreviousRequestIds              []string                         `json:"previous_request_ids,omitempty"`
+	NextRequestIds                  []string                         `json:"next_request_ids,omitempty"`
+	ApplyTextNormalization          bool                             `json:"apply_text_normalization,omitempty"`
+	ApplyLanguageTextNormalization  bool                             `json:"apply_language_text_normalization,omitempty"`
+	VoiceSettings                   *VoiceSettings                   `json:"voice_settings,omitempty"`
+}
+```
+
 ## Status and Future Plans
 
-As of the time of writing (June 24, 2023), the library provides Go bindings for 100% of Elevenlabs's API methods. I do plan to add few more utility type functions should there be some need or enough request for them.
-
-According to Elevenlabs, the API is still considered experimental and is subject to and likely to change.
+This fork maintains compatibility with the original library while providing updated structs to match the latest ElevenLabs API.
 
 ## Contributing
 
