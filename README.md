@@ -1,4 +1,4 @@
-# elevenlabs-go
+# elevenlabs-go v0.1.0
 
 ![Go version](https://img.shields.io/badge/go-1.18-blue)
 ![License](https://img.shields.io/github/license/Mliviu79/elevenlabs-go)
@@ -15,11 +15,12 @@ This repository is a fork of [haguro/elevenlabs-go](https://github.com/haguro/el
 
 1. Updated package name to `github.com/Mliviu79/elevenlabs-go`
 2. Updated the `TextToSpeechRequest` struct to match the latest ElevenLabs API
+3. Released as version 0.1.0
 
 ## Installation
 
 ```bash
-go get github.com/Mliviu79/elevenlabs-go
+go get github.com/Mliviu79/elevenlabs-go@v0.1.0
 ```
 
 ## Example Usage
