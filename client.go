@@ -247,6 +247,36 @@ func (c *Client) TextToSpeechStream(streamWriter io.Writer, voiceID string, ttsR
 	return c.doRequest(c.ctx, streamWriter, http.MethodPost, fmt.Sprintf("%s/text-to-speech/%s/stream", c.baseURL, voiceID), bytes.NewBuffer(reqBody), contentTypeJSON, queries...)
 }
 
+// TextToSpeechStreamWithTimestamps converts text to speech using a specific voice, streams the audio,
+// and returns timestamp information for characters in the original and normalized text.
+// The audio is returned as a base64 encoded string within the response object.
+//
+// It takes a string argument that represents the ID of the voice to be used, and
+// a TextToSpeechRequest argument that contains the text and other settings.
+// Optional QueryFunc arguments can be used, with LatencyOptimizations and OutputFormat being relevant.
+//
+// It returns a pointer to a TextToSpeechStreamWithTimestampsResponse object or an error.
+// The caller is responsible for base64 decoding the audio from response.AudioBase64.
+func (c *Client) TextToSpeechStreamWithTimestamps(voiceID string, ttsReq TextToSpeechRequest, queries ...QueryFunc) (*TextToSpeechStreamWithTimestampsResponse, error) {
+	reqBody, err := json.Marshal(ttsReq)
+	if err != nil {
+		return nil, err
+	}
+
+	respBuf := bytes.Buffer{}
+	err = c.doRequest(c.ctx, &respBuf, http.MethodPost, fmt.Sprintf("%s/text-to-speech/%s/stream/with-timestamps", c.baseURL, voiceID), bytes.NewBuffer(reqBody), contentTypeJSON, queries...)
+	if err != nil {
+		return nil, err
+	}
+
+	var ttsResponse TextToSpeechStreamWithTimestampsResponse
+	if err := json.Unmarshal(respBuf.Bytes(), &ttsResponse); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal timestamp response: %w", err)
+	}
+
+	return &ttsResponse, nil
+}
+
 // GetModels retrieves the list of all available models.
 //
 // It returns a slice of Model objects or an error.
