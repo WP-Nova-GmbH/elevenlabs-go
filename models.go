@@ -32,43 +32,36 @@ type Model struct {
 	TokenCostFactor                    float32    `json:"token_cost_factor"`
 }
 
-// TextToSpeechRequest defines the request body for the text-to-speech endpoint.
-// It includes the text to synthesize, model ID, and voice settings.
 type TextToSpeechRequest struct {
 	Text                            string                           `json:"text"`
 	ModelID                         string                           `json:"model_id,omitempty"`
-	LanguageCode                    string                           `json:"language_code,omitempty"` // See https://elevenlabs.io/docs/speech-synthesis/supported-languages
+	LanguageCode                    string                           `json:"language_code,omitempty"`
 	PronunciationDictionaryLocators []PronunciationDictionaryLocator `json:"pronunciation_dictionary_locators,omitempty"`
 	Seed                            int                              `json:"seed,omitempty"`
 	PreviousText                    string                           `json:"previous_text,omitempty"`
 	NextText                        string                           `json:"next_text,omitempty"`
 	PreviousRequestIds              []string                         `json:"previous_request_ids,omitempty"`
 	NextRequestIds                  []string                         `json:"next_request_ids,omitempty"`
-	ApplyTextNormalization          bool                             `json:"apply_text_normalization,omitempty"`          // Defaults to true
-	ApplyLanguageTextNormalization  bool                             `json:"apply_language_text_normalization,omitempty"` // Defaults to true
+	ApplyTextNormalization          bool                             `json:"apply_text_normalization,omitempty"`
+	ApplyLanguageTextNormalization  bool                             `json:"apply_language_text_normalization,omitempty"`
 	VoiceSettings                   *VoiceSettings                   `json:"voice_settings,omitempty"`
-}
-
-// Alignment holds timestamp information for characters.
-// This is used in the TextToSpeechStreamWithTimestampsResponse.
-type Alignment struct {
-	Characters                 []string  `json:"characters"`
-	CharacterStartTimesSeconds []float64 `json:"character_start_times_seconds"`
-	CharacterEndTimesSeconds   []float64 `json:"character_end_times_seconds"`
-}
-
-// TextToSpeechStreamWithTimestampsResponse defines the response body for the
-// text-to-speech endpoint when requesting timestamps.
-// It includes base64 encoded audio and alignment data.
-type TextToSpeechStreamWithTimestampsResponse struct {
-	AudioBase64         string    `json:"audio_base64"`
-	Alignment           Alignment `json:"alignment"`
-	NormalizedAlignment Alignment `json:"normalized_alignment"`
 }
 
 type PronunciationDictionaryLocator struct {
 	PronunciationDictionaryId string `json:"pronunciation_dictionary_id"`
 	VersionId                 string `json:"version_id"`
+}
+
+type TextToSpeechWithTimestampsResponse struct {
+	AudioBase64         string        `json:"audio_base64"`
+	Alignment           AlignmentInfo `json:"alignment"`
+	NormalizedAlignment AlignmentInfo `json:"normalized_alignment"`
+}
+
+type AlignmentInfo struct {
+	Characters                 []string  `json:"characters"`
+	CharacterStartTimesSeconds []float64 `json:"character_start_times_seconds"`
+	CharacterEndTimesSeconds   []float64 `json:"character_end_times_seconds"`
 }
 
 type GetVoicesResponse struct {
