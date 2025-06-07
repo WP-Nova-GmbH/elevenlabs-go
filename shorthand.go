@@ -16,8 +16,8 @@ func TextToSpeechStream(streamWriter io.Writer, voiceID string, ttsReq TextToSpe
 }
 
 // TextToSpeechWithTimestamps calls the TextToSpeechWithTimestamps method on the default client.
-func TextToSpeechWithTimestamps(streamWriter io.Writer, voiceID string, ttsReq TextToSpeechRequest, queries ...QueryFunc) error {
-	return getDefaultClient().TextToSpeechWithTimestamps(streamWriter, voiceID, ttsReq, queries...)
+func TextToSpeechStreamWithTimestamps(streamWriter io.Writer, voiceID string, ttsReq TextToSpeechRequest, queries ...QueryFunc) error {
+	return getDefaultClient().TextToSpeechStreamWithTimestamps(streamWriter, voiceID, ttsReq, queries...)
 }
 
 // GetModels calls the GetModels method on the default client.

@@ -247,7 +247,7 @@ func (c *Client) TextToSpeechStream(streamWriter io.Writer, voiceID string, ttsR
 	return c.doRequest(c.ctx, streamWriter, http.MethodPost, fmt.Sprintf("%s/text-to-speech/%s/stream", c.baseURL, voiceID), bytes.NewBuffer(reqBody), contentTypeJSON, queries...)
 }
 
-// TextToSpeechWithTimestamps converts a given text to speech audio with character-level timestamps.
+// TextToSpeechStreamWithTimestamps converts a given text to speech audio with character-level timestamps.
 //
 // It takes an io.Writer argument to which the streamed response will be copied, a string argument that represents the
 // ID of the voice to be used for the text to speech conversion, a TextToSpeechRequest argument that contains the text
@@ -260,7 +260,7 @@ func (c *Client) TextToSpeechStream(streamWriter io.Writer, voiceID string, ttsR
 // It is important to set the timeout of the client to a duration large enough to maintain the desired streaming period.
 //
 // It returns nil if successful or an error otherwise.
-func (c *Client) TextToSpeechWithTimestamps(streamWriter io.Writer, voiceID string, ttsReq TextToSpeechRequest, queries ...QueryFunc) error {
+func (c *Client) TextToSpeechStreamWithTimestamps(streamWriter io.Writer, voiceID string, ttsReq TextToSpeechRequest, queries ...QueryFunc) error {
 	reqBody, err := json.Marshal(ttsReq)
 	if err != nil {
 		return err

@@ -137,7 +137,7 @@ func ExampleClient_TextToSpeechWithTimestamps() {
 	defer file.Close()
 
 	// Call the TextToSpeechWithTimestamps method, streaming the JSON response to the file
-	err = client.TextToSpeechWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
+	err = client.TextToSpeechStreamWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
 	if err != nil {
 		log.Fatal(err)
 	}
