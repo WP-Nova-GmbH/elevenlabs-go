@@ -1,7 +1,7 @@
-# elevenlabs-go
+# elevenlabs-go v0.2.0
 
 ![Go version](https://img.shields.io/badge/go-1.18-blue)
-![License](https://img.shields.io/github/license/haguro/elevenlabs-go)
+![License](https://img.shields.io/github/license/Mliviu79/elevenlabs-go)
 ![Tests](https://github.com/haguro/elevenlabs-go/actions/workflows/tests.yml/badge.svg?branch=main&event=push)
 [![codecov](https://codecov.io/gh/haguro/elevenlabs-go/branch/main/graph/badge.svg?token=UM33DSSTAG)](https://codecov.io/gh/haguro/elevenlabs-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/haguro/elevenlabs-go)](https://goreportcard.com/report/github.com/haguro/elevenlabs-go)
@@ -193,6 +193,92 @@ immediately, even if the buffer isn't full.`
  }
 
  log.Print("All done.")
+}
+```
+
+## TextToSpeechRequest Struct
+
+The `TextToSpeechRequest` struct has been updated to match the latest ElevenLabs API:
+
+```go
+type TextToSpeechRequest struct {
+	Text                            string                           `json:"text"`
+	ModelID                         string                           `json:"model_id,omitempty"`
+	LanguageCode                    string                           `json:"language_code,omitempty"`
+	PronunciationDictionaryLocators []PronunciationDictionaryLocator `json:"pronunciation_dictionary_locators,omitempty"`
+	Seed                            int                              `json:"seed,omitempty"`
+	PreviousText                    string                           `json:"previous_text,omitempty"`
+	NextText                        string                           `json:"next_text,omitempty"`
+	PreviousRequestIds              []string                         `json:"previous_request_ids,omitempty"`
+	NextRequestIds                  []string                         `json:"next_request_ids,omitempty"`
+	ApplyTextNormalization          bool                             `json:"apply_text_normalization,omitempty"`
+	ApplyLanguageTextNormalization  bool                             `json:"apply_language_text_normalization,omitempty"`
+	VoiceSettings                   *VoiceSettings                   `json:"voice_settings,omitempty"`
+}
+```
+
+## Text-to-Speech with Timestamps
+
+This fork includes support for the new ElevenLabs API endpoint that provides character-level timestamps along with the generated audio. The response contains:
+
+- `audio_base64`: Base64 encoded audio data
+- `alignment`: Timestamp information for each character in the original text
+- `normalized_alignment`: Timestamp information for each character in the normalized text
+
+### Example Usage
+
+```go
+package main
+
+import (
+ "context"
+ "log"
+ "os"
+ "time"
+
+ "github.com/Mliviu79/elevenlabs-go"
+)
+
+func main() {
+ // Create a new client
+ client := elevenlabs.NewClient(context.Background(), "your-api-key", 30*time.Second)
+
+ // Create a TextToSpeechRequest
+ ttsReq := elevenlabs.TextToSpeechRequest{
+  Text:    "Hello, world! This is a test with timestamps.",
+  ModelID: "eleven_monolingual_v1",
+ }
+
+ // Create a file to write the JSON response containing audio and timestamps
+ file, err := os.Create("response_with_timestamps.json")
+ if err != nil {
+  log.Fatal(err)
+ }
+ defer file.Close()
+
+ // Call the TextToSpeechWithTimestamps method, streaming the JSON response to the file
+ err = client.TextToSpeechWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
+ if err != nil {
+  log.Fatal(err)
+ }
+
+ log.Println("Successfully generated audio with timestamps")
+}
+```
+
+The response structure includes:
+
+```go
+type TextToSpeechWithTimestampsResponse struct {
+	AudioBase64         string        `json:"audio_base64"`
+	Alignment           AlignmentInfo `json:"alignment"`
+	NormalizedAlignment AlignmentInfo `json:"normalized_alignment"`
+}
+
+type AlignmentInfo struct {
+	Characters                 []string  `json:"characters"`
+	CharacterStartTimesSeconds []float64 `json:"character_start_times_seconds"`
+	CharacterEndTimesSeconds   []float64 `json:"character_end_times_seconds"`
 }
 ```
 

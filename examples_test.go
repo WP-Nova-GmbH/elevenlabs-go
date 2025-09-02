@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/haguro/elevenlabs-go"
+	"github.com/Mliviu79/elevenlabs-go"
 )
 
 func ExampleClient_TextToSpeech() {
@@ -117,4 +117,30 @@ func ExampleClient_GetHistory() {
 		}
 		printHistory(historyResp, page)
 	}
+}
+
+func ExampleClient_TextToSpeechWithTimestamps() {
+	// Create a new client
+	client := elevenlabs.NewClient(context.Background(), "your-api-key", 30*time.Second)
+
+	// Create a TextToSpeechRequest
+	ttsReq := elevenlabs.TextToSpeechRequest{
+		Text:    "Hello, world! This is a test with timestamps.",
+		ModelID: "eleven_monolingual_v1",
+	}
+
+	// Create a file to write the JSON response containing audio and timestamps
+	file, err := os.Create("response_with_timestamps.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	// Call the TextToSpeechWithTimestamps method, streaming the JSON response to the file
+	err = client.TextToSpeechStreamWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Successfully generated audio with timestamps")
 }

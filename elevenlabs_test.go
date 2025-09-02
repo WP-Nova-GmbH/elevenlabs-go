@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/haguro/elevenlabs-go"
+	"github.com/Mliviu79/elevenlabs-go"
 )
 
 const (

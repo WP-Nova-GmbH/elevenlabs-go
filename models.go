@@ -33,9 +33,35 @@ type Model struct {
 }
 
 type TextToSpeechRequest struct {
-	Text          string         `json:"text"`
-	ModelID       string         `json:"model_id,omitempty"`
-	VoiceSettings *VoiceSettings `json:"voice_settings,omitempty"`
+	Text                            string                           `json:"text"`
+	ModelID                         string                           `json:"model_id,omitempty"`
+	LanguageCode                    string                           `json:"language_code,omitempty"`
+	PronunciationDictionaryLocators []PronunciationDictionaryLocator `json:"pronunciation_dictionary_locators,omitempty"`
+	Seed                            int                              `json:"seed,omitempty"`
+	PreviousText                    string                           `json:"previous_text,omitempty"`
+	NextText                        string                           `json:"next_text,omitempty"`
+	PreviousRequestIds              []string                         `json:"previous_request_ids,omitempty"`
+	NextRequestIds                  []string                         `json:"next_request_ids,omitempty"`
+	ApplyTextNormalization          bool                             `json:"apply_text_normalization,omitempty"`
+	ApplyLanguageTextNormalization  bool                             `json:"apply_language_text_normalization,omitempty"`
+	VoiceSettings                   *VoiceSettings                   `json:"voice_settings,omitempty"`
+}
+
+type PronunciationDictionaryLocator struct {
+	PronunciationDictionaryId string `json:"pronunciation_dictionary_id"`
+	VersionId                 string `json:"version_id"`
+}
+
+type TextToSpeechWithTimestampsResponse struct {
+	AudioBase64         string        `json:"audio_base64"`
+	Alignment           AlignmentInfo `json:"alignment"`
+	NormalizedAlignment AlignmentInfo `json:"normalized_alignment"`
+}
+
+type AlignmentInfo struct {
+	Characters                 []string  `json:"characters"`
+	CharacterStartTimesSeconds []float64 `json:"character_start_times_seconds"`
+	CharacterEndTimesSeconds   []float64 `json:"character_end_times_seconds"`
 }
 
 type GetVoicesResponse struct {
@@ -62,10 +88,11 @@ type Voice struct {
 }
 
 type VoiceSettings struct {
-	SimilarityBoost float32 `json:"similarity_boost"`
-	Stability       float32 `json:"stability"`
+	Stability       float32 `json:"stability,omitempty"`
+	SimilarityBoost float32 `json:"similarity_boost,omitempty"`
 	Style           float32 `json:"style,omitempty"`
 	SpeakerBoost    bool    `json:"use_speaker_boost,omitempty"`
+	Speed           float32 `json:"speed,omitempty"` // 0.25 to 4.0
 }
 
 type VoiceSharing struct {
@@ -201,7 +228,7 @@ type Subscription struct {
 	VoiceAddEditCounter            int     `json:"voice_add_edit_counter"`
 	HasOpenInvoices                bool    `json:"has_open_invoices"`
 	NextInvoice                    Invoice `json:"next_invoice"`
-	withInvoicingDetails           bool
+	WithInvoicingDetails           bool    `json:"with_invoicing_details"`
 }
 
 type Invoice struct {
