@@ -7,19 +7,44 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/haguro/elevenlabs-go)](https://goreportcard.com/report/github.com/haguro/elevenlabs-go)
 [![Go Reference](https://pkg.go.dev/badge/github.com/haguro/elevenlabs-go.svg)](https://pkg.go.dev/github.com/haguro/elevenlabs-go#section-documentation)
 
-This is a Go client library for the [ElevenLabs](https://elevenlabs.io/) voice cloning and speech synthesis platform. It provides a basic interface for Go programs to interact with the ElevenLabs [API](https://docs.elevenlabs.io/api-reference).
+This is a Go client library for the [ElevenLabs](https://elevenlabs.io/) voice cloning and speech synthesis platform. It provides a interface for Go programs to interact with the ElevenLabs [API](https://docs.elevenlabs.io/api-reference).
+
+This is a fork of the original [elevenlabs-go](github.com/haguro/elevenlabs-go) that was archived by 2025, and integrates the updates to the lib from [Milvui79](https://github.com/Mliviu79/elevenlabs-go)s forks.
+
+| Feature                 | Original | Fork |
+| ----------------------- | :------: | :--: |
+| TextToSpeech            |   [x]    | [x]  |
+| TextToSpeechStream      |   [x]    | [x]  |
+| GetModels               |   [x]    | [x]  |
+| GetVoices               |   [x]    | [x]  |
+| GetDefaultVoiceSettings |   [x]    | [x]  |
+| GetVoiceSettings        |   [x]    | [x]  |
+| GetVoice                |   [x]    | [x]  |
+| DeleteVoice             |   [x]    | [x]  |
+| EditVoiceSettings       |   [x]    | [x]  |
+| AddVoice                |   [x]    | [x]  |
+| EditVoice               |   [x]    | [x]  |
+| DeleteSample            |   [x]    | [x]  |
+| GetSampleAudio          |   [x]    | [x]  |
+| GetHistory              |   [x]    | [x]  |
+| GetHistoryItem          |   [x]    | [x]  |
+| DeleteHistoryItem       |   [x]    | [x]  |
+| GetHistoryItemAudio     |   [x]    | [x]  |
+| DownloadHistoryAudio    |   [x]    | [x]  |
+| GetSubscription         |   [x]    | [x]  |
+| GetUser                 |   [x]    | [x]  |
+| SpeechToText            |   [ ]    | [x]  |
+
 
 ## Installation
 
 ```bash
-go get github.com/haguro/elevenlabs-go
+go get github.com/WP-Nova-GmbH/elevenlabs-go@v1.0.0
 ```
 
 ## Example Usage
 
 Make sure to replace `"your-api-key"` in all examples with your actual API key. Refer to the official Elevenlabs [API documentation](https://docs.elevenlabs.io/api-reference/quick-start/introduction) for further details.
-
-Full documentation of this library is available [here](https://pkg.go.dev/github.com/haguro/elevenlabs-go).
 
 ### Using a New Client Instance
 
@@ -34,7 +59,7 @@ import (
  "os"
  "time"
 
- "github.com/haguro/elevenlabs-go"
+ "github.com/WP-Nova-GmbH/elevenlabs-go"
 )
 
 func main() {
@@ -74,7 +99,7 @@ import (
  "os"
  "time"
 
- el "github.com/haguro/elevenlabs-go"
+ el "github.com/WP-Nova-GmbH/elevenlabs-go"
 )
 
 func main() {
@@ -115,7 +140,7 @@ import (
  "os/exec"
  "time"
 
- "github.com/haguro/elevenlabs-go"
+ "github.com/WP-Nova-GmbH/elevenlabs-go"
 )
 
 func main() {
@@ -173,9 +198,10 @@ immediately, even if the buffer isn't full.`
 
 ## Status and Future Plans
 
-As of the time of writing (June 24, 2023), the library provides Go bindings for 100% of Elevenlabs's API methods. I do plan to add few more utility type functions should there be some need or enough request for them.
+This library is an evolution of the original [elevenlabs-go](github.com/haguro/elevenlabs-go) library. This project is not designed to be a complete coverage of the elevenlabs API but more a project to cover the needs for
+our (WP-Nova GmbH) AI platfrom: [chat.wp-nova.ai](chat.wp-nova.ai).
 
-According to Elevenlabs, the API is still considered experimental and is subject to and likely to change.
+Four our AI speech features we use the elevenlabs services so I guess if you want to do the typical "text"/"speech" stuff and don't need special neachy elevenlabs features this lib is what you want.
 
 ## Contributing
 
