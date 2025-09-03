@@ -1,40 +1,50 @@
-# elevenlabs-go v0.2.0
+# elevenlabs-go v0.3.X
 
 ![Go version](https://img.shields.io/badge/go-1.18-blue)
-![License](https://img.shields.io/github/license/Mliviu79/elevenlabs-go)
-![Tests](https://github.com/haguro/elevenlabs-go/actions/workflows/tests.yml/badge.svg?branch=main&event=push)
-[![codecov](https://codecov.io/gh/haguro/elevenlabs-go/branch/main/graph/badge.svg?token=UM33DSSTAG)](https://codecov.io/gh/haguro/elevenlabs-go)
-[![Go Report Card](https://goreportcard.com/badge/github.com/haguro/elevenlabs-go)](https://goreportcard.com/report/github.com/haguro/elevenlabs-go)
-[![Go Reference](https://pkg.go.dev/badge/github.com/haguro/elevenlabs-go.svg)](https://pkg.go.dev/github.com/haguro/elevenlabs-go#section-documentation)
+![License](https://img.shields.io/github/license/WP-Nova-GmbH/elevenlabs-go)
 
 This is a Go client library for the [ElevenLabs](https://elevenlabs.io/) voice cloning and speech synthesis platform. It provides a interface for Go programs to interact with the ElevenLabs [API](https://docs.elevenlabs.io/api-reference).
 
-This is a fork of the original [elevenlabs-go](github.com/haguro/elevenlabs-go) that was archived by 2025, and integrates the updates to the lib from [Milvui79](https://github.com/Mliviu79/elevenlabs-go)s forks.
+## About this Fork
 
-| Feature                 | Original | Fork |
-| ----------------------- | :------: | :--: |
-| TextToSpeech            |   [x]    | [x]  |
-| TextToSpeechStream      |   [x]    | [x]  |
-| GetModels               |   [x]    | [x]  |
-| GetVoices               |   [x]    | [x]  |
-| GetDefaultVoiceSettings |   [x]    | [x]  |
-| GetVoiceSettings        |   [x]    | [x]  |
-| GetVoice                |   [x]    | [x]  |
-| DeleteVoice             |   [x]    | [x]  |
-| EditVoiceSettings       |   [x]    | [x]  |
-| AddVoice                |   [x]    | [x]  |
-| EditVoice               |   [x]    | [x]  |
-| DeleteSample            |   [x]    | [x]  |
-| GetSampleAudio          |   [x]    | [x]  |
-| GetHistory              |   [x]    | [x]  |
-| GetHistoryItem          |   [x]    | [x]  |
-| DeleteHistoryItem       |   [x]    | [x]  |
-| GetHistoryItemAudio     |   [x]    | [x]  |
-| DownloadHistoryAudio    |   [x]    | [x]  |
-| GetSubscription         |   [x]    | [x]  |
-| GetUser                 |   [x]    | [x]  |
-| SpeechToText            |   [ ]    | [x]  |
+This repo is a fork of the original [elevenlabs-go](github.com/haguro/elevenlabs-go) and integrates the updates from [Mlivui79](https://github.com/Mliviu79/elevenlabs-go)`s fork.
 
+**Why this is needed?:**  
+This evolution of elvenlabs-go by WP-Nova-GmbH is primarly a package support takeover because we need some of
+the elevenlabs features that aren't supported by the versions before. There isn't a need to reinvent the weel
+but a need for up-to-date packages, when integrating TTS/STT in the long run. So here we go!
+
+To make a clear seperation between the package versions they are labeld like this:
+
+- Original: v0.1.X
+- Mlivui79`s fork: v0.2.X
+- WP-Nova-GmbH: v0.3.X
+
+And here is the feature overview so you can decide what version to use :).
+
+| Feature                 | v0.1.X | v.0.2.X | v0.3.X |
+| ----------------------- | :----: | :-----: | :----: |
+| TextToSpeech            |  [ ]   |   [x]   |   [ ]  |
+| TextToSpeechStream      |  [ ]   |   [x]   |   [ ]  |
+| GetModels               |  [x]   |   [ ]   |   [ ]  |
+| GetVoices               |  [x]   |   [ ]   |   [ ]  |
+| GetDefaultVoiceSettings |  [x]   |   [ ]   |   [ ]  |
+| GetVoiceSettings        |  [x]   |   [ ]   |   [ ]  |
+| GetVoice                |  [x]   |   [ ]   |   [ ]  |
+| DeleteVoice             |  [x]   |   [ ]   |   [ ]  |
+| EditVoiceSettings       |  [x]   |   [ ]   |   [ ]  |
+| AddVoice                |  [x]   |   [ ]   |   [ ]  |
+| EditVoice               |  [x]   |   [ ]   |   [ ]  |
+| DeleteSample            |  [x]   |   [ ]   |   [ ]  |
+| GetSampleAudio          |  [x]   |   [ ]   |   [ ]  |
+| GetHistory              |  [x]   |   [ ]   |   [ ]  |
+| GetHistoryItem          |  [x]   |   [ ]   |   [ ]  |
+| DeleteHistoryItem       |  [x]   |   [ ]   |   [ ]  |
+| GetHistoryItemAudio     |  [x]   |   [ ]   |   [ ]  |
+| DownloadHistoryAudio    |  [x]   |   [ ]   |   [ ]  |
+| GetSubscription         |  [x]   |   [ ]   |   [ ]  |
+| GetUser                 |  [x]   |   [ ]   |   [ ]  |
+| SpeechToText            |  [ ]   |   [ ]   |   [x]  |
 
 ## Installation
 
