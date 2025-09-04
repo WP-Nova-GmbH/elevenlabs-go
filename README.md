@@ -49,7 +49,7 @@ And here is the feature overview so you can decide what version to use :).
 ## Installation
 
 ```bash
-go get github.com/WP-Nova-GmbH/elevenlabs-go@v1.0.0
+go get github.com/WP-Nova-GmbH/elevenlabs-go@v0.3.0
 ```
 
 ## Example Usage
