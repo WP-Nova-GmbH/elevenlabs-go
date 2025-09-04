@@ -7,12 +7,13 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Mliviu79/elevenlabs-go"
+	"github.com/WP-Nova-GmbH/elevenlabs-go"
 )
 
 const (
@@ -851,5 +852,38 @@ func TestGetUser(t *testing.T) {
 	}
 	if !reflect.DeepEqual(expUser, user) {
 		t.Errorf("Unexpected User in response: %+v", user)
+	}
+}
+
+func TestIntegrationSpeechToText(t *testing.T) {
+	apiKey := os.Getenv("ELEVENLABS_API_KEY")
+	if apiKey == "" {
+		t.Skip("skipping integration test: ELEVENLABS_API_KEY is not set")
+	}
+
+	ctx := context.Background()
+	client := elevenlabs.NewClient(ctx, apiKey, 30*time.Second)
+
+	audioFilePath := "testdata/common_voice_de_2.mp3"
+	audioFile, err := os.Open(audioFilePath)
+	if err != nil {
+		t.Fatalf("failed to open audio file: %v", err)
+	}
+	defer audioFile.Close()
+
+	req := elevenlabs.SpeechToTextRequest{
+		ModelID:  "scribe_v1",
+		FileName: "test_voice.mp3",
+		Audio:    audioFile,
+	}
+
+	response, err := client.SpeechToText(req)
+	if err != nil {
+		t.Errorf("SpeechToText failed: %v", err)
+	}
+	if len(response) == 0 {
+		t.Errorf("SpeechToText returned empty response")
+	} else {
+		t.Logf("SpeechToText returned response: %s", string(response))
 	}
 }

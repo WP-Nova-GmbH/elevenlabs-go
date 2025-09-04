@@ -315,6 +315,15 @@ This is an independent project and is not affiliated with or endorsed by Elevenl
 
 This project is licensed under the [MIT License](LICENSE).
 
+## Test Data
+
+The audio files in this directory are from the Mozilla Common Voice dataset.
+
+- **Source**: [Mozilla Common Voice](httpss://commonvoice.mozilla.org/)
+- **License**: [Creative Commons CC0](httpss://creativecommons.org/publicdomain/zero/1.0/) (Public Domain)
+
+The files have been included here to be used for integration tests for this library.
+
 ## Warranty
 
 This code library is provided "as is" and without any warranties whatsoever. Use at your own risk. More details in the [LICENSE](LICENSE) file.

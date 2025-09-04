@@ -47,6 +47,51 @@ type TextToSpeechRequest struct {
 	VoiceSettings                   *VoiceSettings                   `json:"voice_settings,omitempty"`
 }
 
+type SpeechToTextRequest struct {
+	ModelID    string
+	FileName   string
+	Audio      io.Reader
+	FileFormat string `json:"file_format,omitempty"`
+}
+
+func (r *SpeechToTextRequest) buildRequestBody() (*bytes.Buffer, string, error) {
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+	buildFailed := func(err error) (*bytes.Buffer, string, error) {
+		return nil, "", fmt.Errorf("failed to build request body: %w", err)
+	}
+
+	modelID := r.ModelID
+	if modelID == "" {
+		modelID = "scribe_v1" // default model id
+	}
+
+	if err := w.WriteField("model_id", modelID); err != nil {
+		return buildFailed(err)
+	}
+
+	if r.FileFormat != "" {
+		if err := w.WriteField("file_format", r.FileFormat); err != nil {
+			return buildFailed(err)
+		}
+	}
+
+	fw, err := w.CreateFormFile("file", r.FileName)
+	if err != nil {
+		return buildFailed(err)
+	}
+	if _, err = io.Copy(fw, r.Audio); err != nil {
+		return buildFailed(err)
+	}
+
+	err = w.Close()
+	if err != nil {
+		return buildFailed(err)
+	}
+
+	return &b, w.FormDataContentType(), nil
+}
+
 type PronunciationDictionaryLocator struct {
 	PronunciationDictionaryId string `json:"pronunciation_dictionary_id"`
 	VersionId                 string `json:"version_id"`

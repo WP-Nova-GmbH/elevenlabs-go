@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/Mliviu79/elevenlabs-go"
+	"github.com/WP-Nova-GmbH/elevenlabs-go"
 )
 
 func ExampleClient_TextToSpeech() {
@@ -77,8 +77,10 @@ immediately, even if the buffer isn't full.`
 	}
 	log.Print("Streaming finished.")
 
-	// Wait for mpv to exit. With the pipe closed, it will do that as
-	// soon as it finishes playing
+	/*
+		Wait for mpv to exit. With the pipe closed, it will do that as
+		soon as it finishes playing
+	*/
 	if err := cmd.Wait(); err != nil {
 		log.Fatal(err)
 	}
@@ -109,8 +111,10 @@ func ExampleClient_GetHistory() {
 	// Get all other pages
 	for nextPage != nil {
 		page++
-		// Retrieve the next page. The page size from the original call is retained but
-		// can be overwritten by passing a call to PageSize with the new size.
+		/*
+			Retrieve the next page. The page size from the original call is retained but
+			can be overwritten by passing a call to PageSize with the new size.
+		*/
 		historyResp, nextPage, err = nextPage()
 		if err != nil {
 			log.Fatal(err)
@@ -119,28 +123,28 @@ func ExampleClient_GetHistory() {
 	}
 }
 
-func ExampleClient_TextToSpeechWithTimestamps() {
-	// Create a new client
-	client := elevenlabs.NewClient(context.Background(), "your-api-key", 30*time.Second)
+// func ExampleClient_TextToSpeechWithTimestamps() {
+// 	// Create a new client
+// 	client := elevenlabs.NewClient(context.Background(), "your-api-key", 30*time.Second)
 
-	// Create a TextToSpeechRequest
-	ttsReq := elevenlabs.TextToSpeechRequest{
-		Text:    "Hello, world! This is a test with timestamps.",
-		ModelID: "eleven_monolingual_v1",
-	}
+// 	// Create a TextToSpeechRequest
+// 	ttsReq := elevenlabs.TextToSpeechRequest{
+// 		Text:    "Hello, world! This is a test with timestamps.",
+// 		ModelID: "eleven_monolingual_v1",
+// 	}
 
-	// Create a file to write the JSON response containing audio and timestamps
-	file, err := os.Create("response_with_timestamps.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
+// 	// Create a file to write the JSON response containing audio and timestamps
+// 	file, err := os.Create("response_with_timestamps.json")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer file.Close()
 
-	// Call the TextToSpeechWithTimestamps method, streaming the JSON response to the file
-	err = client.TextToSpeechStreamWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	// Call the TextToSpeechWithTimestamps method, streaming the JSON response to the file
+// 	err = client.TextToSpeechStreamWithTimestamps(file, "pNInz6obpgDQGcFmaJgB", ttsReq)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	log.Println("Successfully generated audio with timestamps")
-}
+// 	log.Println("Successfully generated audio with timestamps")
+// }

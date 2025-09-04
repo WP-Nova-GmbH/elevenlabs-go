@@ -38,10 +38,11 @@ type QueryFunc func(*url.Values)
 // (which defaults to 30 seconds) can be modified with SetAPIKey and SetTimeout respectively, but the parent
 // context is fixed and is set to context.Background().
 type Client struct {
-	baseURL string
-	apiKey  string
-	timeout time.Duration
-	ctx     context.Context
+	baseURL    string
+	apiKey     string
+	httpClient *http.Client
+	ctx        context.Context
+	mu         sync.RWMutex
 }
 
 func getDefaultClient() *Client {
@@ -57,7 +58,10 @@ func getDefaultClient() *Client {
 // authentication is needed.
 // The function takes a string argument which is the API key to be set.
 func SetAPIKey(apiKey string) {
-	getDefaultClient().apiKey = apiKey
+	client := getDefaultClient()
+	client.mu.Lock()
+	defer client.mu.Unlock()
+	client.apiKey = apiKey
 }
 
 // SetTimeout sets the timeout duration for the default client.
@@ -65,7 +69,19 @@ func SetAPIKey(apiKey string) {
 // It can be called if a custom timeout settings are required for API calls.
 // The function takes a time.Duration argument which is the timeout to be set.
 func SetTimeout(timeout time.Duration) {
-	getDefaultClient().timeout = timeout
+	client := getDefaultClient()
+	client.mu.Lock()
+	defer client.mu.Unlock()
+	// Create a new http.Client to avoid a race condition on the Timeout field.
+	// We preserve the old transport to reuse existing connections.
+	transport := client.httpClient.Transport
+	if transport == nil {
+		transport = http.DefaultTransport
+	}
+	client.httpClient = &http.Client{
+		Timeout:   timeout,
+		Transport: transport,
+	}
 }
 
 // NewClient creates and returns a new Client object with provided settings.
@@ -78,13 +94,23 @@ func SetTimeout(timeout time.Duration) {
 //
 // It returns a pointer to a newly created Client.
 func NewClient(ctx context.Context, apiKey string, reqTimeout time.Duration) *Client {
-	return &Client{baseURL: elevenlabsBaseURL, apiKey: apiKey, timeout: reqTimeout, ctx: ctx}
+	return &Client{
+		baseURL: elevenlabsBaseURL,
+		apiKey:  apiKey,
+		httpClient: &http.Client{
+			Timeout: reqTimeout,
+		},
+		ctx: ctx,
+	}
 }
 
 func (c *Client) doRequest(ctx context.Context, RespBodyWriter io.Writer, method, url string, bodyBuf io.Reader, contentType string, queries ...QueryFunc) error {
-	timeoutCtx, cancel := context.WithTimeout(ctx, c.timeout)
-	defer cancel()
-	req, err := http.NewRequestWithContext(timeoutCtx, method, url, bodyBuf)
+	c.mu.RLock()
+	apiKey := c.apiKey
+	httpClient := c.httpClient
+	c.mu.RUnlock()
+
+	req, err := http.NewRequestWithContext(ctx, method, url, bodyBuf)
 	if err != nil {
 		return err
 	}
@@ -93,8 +119,8 @@ func (c *Client) doRequest(ctx context.Context, RespBodyWriter io.Writer, method
 	if contentType != "" {
 		req.Header.Add("Content-Type", contentType)
 	}
-	if c.apiKey != "" {
-		req.Header.Add("xi-api-key", c.apiKey)
+	if apiKey != "" {
+		req.Header.Add("xi-api-key", apiKey)
 	}
 
 	q := req.URL.Query()
@@ -103,8 +129,7 @@ func (c *Client) doRequest(ctx context.Context, RespBodyWriter io.Writer, method
 	}
 	req.URL.RawQuery = q.Encode()
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -228,7 +253,7 @@ func (c *Client) TextToSpeech(voiceID string, ttsReq TextToSpeechRequest, querie
 	return b.Bytes(), nil
 }
 
-// TextToSpeech converts and streams a given text to speech audio using a certain voice.
+// TextToSpeechStream converts and streams a given text to speech audio using a certain voice.
 //
 // It takes an io.Writer argument to which the streamed audio will be copied, a string argument that represents the
 // ID of the voice to be used for the text to speech conversion, a TextToSpeechRequest argument that contain the text
@@ -267,6 +292,26 @@ func (c *Client) TextToSpeechStreamWithTimestamps(streamWriter io.Writer, voiceI
 	}
 
 	return c.doRequest(c.ctx, streamWriter, http.MethodPost, fmt.Sprintf("%s/text-to-speech/%s/stream/with-timestamps", c.baseURL, voiceID), bytes.NewBuffer(reqBody), contentTypeJSON, queries...)
+}
+
+// SpeechToText converts a given audio file to text.
+//
+// It takes a SpeechToTextRequest argument that contains the audio file to be converted and an optional list of QueryFunc 'queries' to modify the request.
+//
+// It returns the JSON response byte slice containing the transcription as text property in case of success or an error.
+func (c *Client) SpeechToText(sttReq SpeechToTextRequest, queries ...QueryFunc) ([]byte, error) {
+	reqBodyBuf, contentType, err := sttReq.buildRequestBody()
+	if err != nil {
+		return nil, err
+	}
+
+	b := bytes.Buffer{}
+	err = c.doRequest(c.ctx, &b, http.MethodPost, fmt.Sprintf("%s/speech-to-text", c.baseURL), reqBodyBuf, contentType, queries...)
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
 }
 
 // GetModels retrieves the list of all available models.
