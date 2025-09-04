@@ -1,6 +1,6 @@
 # elevenlabs-go v0.3.X
 
-![Go version](https://img.shields.io/badge/go-1.18-blue)
+![Go version](https://img.shields.io/badge/go-1.24-blue)
 ![License](https://img.shields.io/github/license/WP-Nova-GmbH/elevenlabs-go)
 
 This is a Go client library for the [ElevenLabs](https://elevenlabs.io/) voice cloning and speech synthesis platform. It provides a interface for Go programs to interact with the ElevenLabs [API](https://docs.elevenlabs.io/api-reference).
